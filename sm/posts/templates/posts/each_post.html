@@ -7,7 +7,7 @@
 {% endif %}
     <p class="card-header"><a href="#" style="text-decoration: none; color: #466b4f;">{{post.user}}</a> | {{post.created}}</p>
     <p class="card-footer">{{post.body}}</p>
-    <div>
+{% if request.user.is_authenticated %}
         <form action="" method="post">
     <div class="card-body text-center">
         {% csrf_token %}
@@ -19,8 +19,7 @@
         <input class="btn" type="submit" value="Add Comment" style="background-color:#85c27c;">
     </div>
 </form>
-
-    </div>
+{% endif %}
     <div class="card-body">
         {% with total=comments.count%}
             <h4>this post has&nbsp;{{total}}&nbsp;comment{{total|pluralize}}</h4><hr>
@@ -29,6 +28,37 @@
             <div class="card-body bg-dark text-white">
                 <p class="card-header">{{comment.user}}</p>
                 <p class="card-footer">{{comment.body}}</p>
+                {% if request.user.is_authenticated %}
+                 <form action="{% url 'posts:add_reply' post.id comment.id %}" method="post">
+                            <div class="card-body text-center ">
+                                {% csrf_token %}
+                                {{reply_form.none_field_errors}}
+                                {{reply_form.body.errors}}
+                                {{reply_form.body}}
+                            </div>
+                            <div class="text-center">
+                                <input class="btn mb-2" type="submit" value="Add Reply" style="background-color:#85c27c;">
+                            </div>
+                        </form>
+                 {% endif %}
+                {% for reply in comment.comment_reply.all %}
+                <div class="card bg text-white" style="background-color: #466b4f;">
+                    <p class="card-header">{{reply.user}}</p>
+                    <p class="card-footer">{{reply.body}}</p>
+                        <form action="{% url 'posts:add_reply' post.id comment.id %}" method="post">
+                            <div class="card-body text-center ">
+                                {% csrf_token %}
+                                {{reply_form.none_field_errors}}
+                                {{reply_form.body.errors}}
+                                {{reply_form.body}}
+                            </div>
+                            <div class="text-center">
+                                <input class="btn mb-2" type="submit" value="Add Reply" style="background-color:#85c27c;">
+                            </div>
+                        </form>
+
+                </div><br>
+                {% endfor %}
             </div><br>
         {% endfor %}
     </div>

@@ -27,3 +27,12 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'body': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '...'}),
         }
+
+
+class ReplyForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('body',)
+        widgets = {
+            'body': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '...'}),
+        }
