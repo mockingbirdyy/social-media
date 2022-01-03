@@ -3,7 +3,7 @@
 {% block content %}
     {% for post in posts %}
         <div class="card m-3">
-            <p class="card-header"><a href="#" style="text-decoration: none; color: #466b4f;">{{post.user}}</a> | {{post.created}}</p>
+            <p class="card-header"><a href="{% url 'accounts:user_dashboard' post.user.id %}" style="text-decoration: none; color: #466b4f;">{{post.user}}</a> | {{post.created}}</p>
             <a class="card-footer" href="{{ post.get_absolute_url }}" style="text-decoration: none; color: black;"><p>{{post.body | truncatechars:500}}</p></a>
         </div>
     {% endfor %}

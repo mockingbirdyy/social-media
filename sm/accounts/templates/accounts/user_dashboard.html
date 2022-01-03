@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}{{user.username}}| Profile {% endblock %}
+{% block content %}
+<div class="text-center">
+    <h3 style="color: #466b4f;">{{user.username}}</h3>
+    <p>{{user.profile.bio}}</p>
+</div>
+{% if self_dash %}
+    <a class="card-link" style="text-decoration: none; color: #47803e;" href="{% url 'posts:add_post' user.id %}">Add Post</a><hr>
+{% endif %}
+{% for post in posts %}
+    <div class="card m-3">
+        <p class="card-header"><a href="{% url 'accounts:user_dashboard' request.user.id %}" style="text-decoration: none; color: #466b4f;">{{post.user}}</a> | {{post.created}}</p>
+        <a class="card-footer" href="{{ post.get_absolute_url }}" style="text-decoration: none; color: black;"><p>{{post.body | truncatechars:500}}</p></a>
+    </div>
+{% empty %}
+    <p class="text-center">there is no post yet</p>
+{% endfor %}
+{% endblock %}

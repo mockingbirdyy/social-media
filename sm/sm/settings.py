@@ -1,7 +1,8 @@
 from pathlib import Path
-
+from django.urls import reverse_lazy
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+LOGIN_URl = reverse_lazy('accounts:user_login')
 
 SECRET_KEY = 'django-insecure-amtff0#e4qp*$zsd7+%s)7*x*i&ps3n-5n*71c6f$u19jhtj0*'
 
@@ -18,6 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'posts.apps.PostsConfig',
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [

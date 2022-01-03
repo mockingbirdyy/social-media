@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<form action="" method="post" novalidate>
+
+    <div class="card-body bg-dark rounded mt-4 text-white" style=" margin: auto;
+  width: 40%;
+  border: 5px;
+  padding: 20px;">
+          <div class="text-center">
+    {% csrf_token %}
+    {{form.none_field_errors}}
+
+    {{form.username.errors}}
+    {{form.username}}
+
+    {{form.password.errors}}
+    {{form.password}}
+          </div>
+        <div class="text-center">
+            <input class="btn" type="submit" value="Login" style="background-color:#85c27c;">
+        </div>
+    </div>
+
+</form>
+
+
+{% endblock %}
