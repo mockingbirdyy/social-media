@@ -1,6 +1,35 @@
 {% extends 'base.html' %}
 {% block title %} {{post.user}} | Post {% endblock %}
 {% block content %}
+{% if request.user.is_authenticated and request.user.id == post.user.id %}
+    <a style="text-decoration: none; color: #466b4f;" href="{% url 'posts:delete_post' request.user.id post.id %}">Delete Post &nbsp;</a>
+    <a style="text-decoration: none; color: #466b4f;" href="{% url 'posts:edit_post' request.user.id post.id %}">Edit Post</a><hr>
+{% endif %}
     <p class="card-header"><a href="#" style="text-decoration: none; color: #466b4f;">{{post.user}}</a> | {{post.created}}</p>
     <p class="card-footer">{{post.body}}</p>
+    <div>
+        <form action="" method="post">
+    <div class="card-body text-center">
+        {% csrf_token %}
+        {{form.none_field_errors}}
+        {{form.body.errors}}
+        {{form.body}}
+    </div>
+    <div class="text-center">
+        <input class="btn" type="submit" value="Add Comment" style="background-color:#85c27c;">
+    </div>
+</form>
+
+    </div>
+    <div class="card-body">
+        {% with total=comments.count%}
+            <h4>this post has&nbsp;{{total}}&nbsp;comment{{total|pluralize}}</h4><hr>
+        {% endwith %}
+        {% for comment in comments %}
+            <div class="card-body bg-dark text-white">
+                <p class="card-header">{{comment.user}}</p>
+                <p class="card-footer">{{comment.body}}</p>
+            </div><br>
+        {% endfor %}
+    </div>
 {% endblock %}
