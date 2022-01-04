@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Edit Profile{% endblock %}
+{% block content %}
+  <div class="card-body bg-dark rounded mt-4 text-white" style=" margin: auto;
+  width: 90%;
+  border: 5px;
+  padding: 20px;">
+    <form action="" method="post">
+    <div class="card-body text-center">
+      {% csrf_token %}
+      {{form.none_field_errors}}
+      {{form.bio.errors}}
+      {{form.bio}}
+
+      {{form.age.errors}}
+      {{form.age}}
+
+      {{form.email.errors}}
+      {{form.email}}
+    </div><hr>
+    <div class="text-center">
+        <input class="btn" type="submit" value="Edit Profile" style="background-color:#85c27c;">
+    </div>
+</form>
+  </div>
+{% endblock %}

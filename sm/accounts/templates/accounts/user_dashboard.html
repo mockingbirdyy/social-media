@@ -6,7 +6,8 @@
     <p>{{user.profile.bio}}</p>
 </div>
 {% if self_dash %}
-    <a class="card-link" style="text-decoration: none; color: #47803e;" href="{% url 'posts:add_post' user.id %}">Add Post</a><hr>
+    <a class="card-link" style="text-decoration: none; color: #47803e;" href="{% url 'posts:add_post' user.id %}">Add Post &nbsp;</a>
+    <a class="card-link" style="text-decoration: none; color: #47803e;" href="{% url 'accounts:edit_profile' user.id %}">Edit Profile</a><hr>
 {% endif %}
 {% for post in posts %}
     <div class="card m-3">
