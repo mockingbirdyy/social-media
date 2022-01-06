@@ -7,18 +7,18 @@
       border: 5px;
       padding: 20px;">
             <div class="text-center">
-        {% csrf_token %}
-        {{form.none_field_errors}}
+                {% csrf_token %}
+                {{form.none_field_errors}}
 
-        {{form.username.errors}}
-        {{form.username}}
+                {{form.username.errors}}
+                {{form.username}}
 
-        {{form.email.errors}}
-        {{form.email}}
+                {{form.email.errors}}
+                {{form.email}}
 
-        {{form.password.errors}}
-        {{form.password}}
-                </div>
+                {{form.password.errors}}
+                {{form.password}}
+            </div>
         <div class="text-center">
         <input class="btn" type="submit" value="Register" style="background-color:#85c27c;">
         </div>

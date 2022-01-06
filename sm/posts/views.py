@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Post, Comment
+from .models import Post, Comment, Vote
 from .forms import AddPostForm, EditPostForm, CommentForm, ReplyForm
 from django.utils.text import slugify
 from django.contrib import messages
@@ -14,6 +14,10 @@ def all_posts(request):
 def each_post(request, year, month, day, slug):
     post = get_object_or_404(Post, created__year=year, created__month=month, created__day=day, slug=slug)
     reply_form = ReplyForm()
+    can_like = False
+    if request.user.is_authenticated:
+        if Post.can_like(self=post, user=request.user):
+            can_like = True
     comments = Comment.objects.filter(post=post, is_reply=False)
     if request.method == "POST":
         form = CommentForm(request.POST)
@@ -25,7 +29,8 @@ def each_post(request, year, month, day, slug):
             messages.success(request, 'Your comment added successfully', 'success')
     else:
         form = CommentForm()
-    return render(request, 'posts/each_post.html', {'post': post, 'comments': comments, 'form': form, 'reply_form': reply_form})
+    return render(request, 'posts/each_post.html',
+                  {'post': post, 'comments': comments, 'form': form, 'reply_form': reply_form, 'can_like': can_like})
 
 
 @login_required
@@ -45,6 +50,7 @@ def add_post(request, user_id):
         return render(request, 'posts/add_post.html', {'form': form})
     else:
         return redirect("posts:all_posts")
+
 
 @login_required
 def delete_post(request, user_id, post_id):
@@ -90,3 +96,11 @@ def add_reply(request, post_id, comment_id):
             new_reply.save()
             messages.success(request, 'Your reply added successfully', 'success')
             return redirect("posts:each_post", post.created.year, post.created.month, post.created.day, post.slug)
+
+
+@login_required
+def like_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    like = Vote(post=post, user=request.user)
+    like.save()
+    return redirect("posts:each_post", post.created.year, post.created.month, post.created.day, post.slug)

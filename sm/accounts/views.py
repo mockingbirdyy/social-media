@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UserRegisterForm, UserLoginForm, EditProfile
+from .forms import UserRegisterForm, UserLoginForm, EditProfile, PhoneLoginForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.models import User
 from posts.models import Post
 from django.contrib.auth.decorators import login_required
+from random import randint
+from kavenegar import *
 
 
 def user_login(request):
@@ -61,7 +63,9 @@ def edit_profile(request, user_id):
     if request.method == 'POST':
         form = EditProfile(request.POST, instance=user.profile)
         if form.is_valid():
-            form.save()
+            new_form = form.save(commit=False)
+            new_form.phone = form.cleaned_data['phone']
+            new_form.save()
             user.email = form.cleaned_data['email']
             user.save()
             messages.success(request, 'Your profile edited successfully', 'success')
@@ -69,3 +73,20 @@ def edit_profile(request, user_id):
     else:
         form = EditProfile(instance=user.profile, initial={'email': request.user.email})
     return render(request, 'accounts/edit_profile.html', {'form': form})
+
+
+def phone_login(request):
+    if request.method == 'POST':
+        form = PhoneLoginForm(request.POST)
+        if form.is_valid():
+            phone = f"0{form.cleaned_data['phone']}"
+            rand_number = randint(1000, 9999)
+            api = KavenegarAPI('374A676B4F374D397346574466655235723773336E4977'
+                               '76574255647743694C476370676E36432F414F4D3D')
+            params = {'receptor': phone, 'message': rand_number}
+            api.sms_send(params)
+            messages.success(request, 'sms sent to your phone', 'success')
+
+    else:
+        form = PhoneLoginForm()
+    return render(request, 'accounts/phone_login.html', {'form': form})

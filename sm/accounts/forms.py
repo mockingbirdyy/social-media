@@ -24,12 +24,23 @@ class UserRegisterForm(forms.Form):
 
 
 class EditProfile(forms.ModelForm):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control  mt-4 mb-4', 'placeholder': 'Email'}),)
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control  mt-4 mb-4', 'placeholder': 'Email'}))
 
     class Meta:
         model = Profile
-        fields = ('bio', 'age')
+        fields = ('bio', 'age', 'phone')
         widgets = {
             'bio': forms.TextInput(attrs={'class': 'form-control mt-4 mb-4', 'placeholder': 'Bio'}),
             'age': forms.NumberInput(attrs={'class': 'form-control ', 'placeholder': 'Age'}),
+            'phone': forms.NumberInput(attrs={'class': 'form-control ', 'placeholder': 'phone number'}),
         }
+
+
+class PhoneLoginForm(forms.Form):
+    phone = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control ', 'placeholder': 'phone number'}))
+
+    def clean_phone(self):
+        phone = Profile.objects.filter(phone=self.cleaned_data['phone'])
+        if not phone.exists():
+            raise forms.ValidationError('this phone number does not exists')
+        return self.cleaned_data['phone']

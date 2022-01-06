@@ -7,6 +7,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, null=True, blank=True)
     age = models.PositiveSmallIntegerField(null=True, blank=True)
+    phone = models.PositiveIntegerField(null=True, blank=True)
 
 
 def profile_save(sender, **kwargs):

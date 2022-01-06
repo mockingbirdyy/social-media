@@ -5,7 +5,9 @@
     <a style="text-decoration: none; color: #466b4f;" href="{% url 'posts:delete_post' request.user.id post.id %}">Delete Post &nbsp;</a>
     <a style="text-decoration: none; color: #466b4f;" href="{% url 'posts:edit_post' request.user.id post.id %}">Edit Post</a><hr>
 {% endif %}
-    <p class="card-header"><a href="#" style="text-decoration: none; color: #466b4f;">{{post.user}}</a> | {{post.created}}</p>
+    <div class="card-header"><a href="#" style="text-decoration: none; color: #466b4f;">{{post.user}}</a> | {{post.created}} | {% if request.user.is_authenticated %}
+        <a href="{% url 'posts:like_post' post.id %}" class="btn btn-outline-danger btn-sm {% if can_like %}disabled{% endif %} ">
+            {% if can_like == False %}<3{% else %}{{ post.like_count }}{% endif %}</a>{% endif %}</div>
     <p class="card-footer">{{post.body}}</p>
 {% if request.user.is_authenticated %}
         <form action="" method="post">

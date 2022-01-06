@@ -15,6 +15,16 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('posts:each_post', args=[self.created.year, self.created.month, self.created.day, self.slug])
 
+    def like_count(self):
+        return self.post_vote.count()
+
+    def can_like(self, user):
+        user_vote = user.user_vote.all()
+        query = user_vote.filter(post=self)
+        if query.exists():
+            return True
+        return False
+
     class Meta:
         ordering = ('-created',)
 
@@ -32,3 +42,11 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ('-created',)
+
+
+class Vote(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_vote')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_vote')
+
+    def __str__(self):
+        return f'{self.user}-{self.post}'
